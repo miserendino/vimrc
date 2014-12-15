@@ -68,17 +68,17 @@ fun! Big5()
 endfun
 ""Statusline
 set laststatus=2
-set statusline=
-set statusline+=%7*\[%n]                                  "buffernr
-set statusline+=%1*\ %<%F\                                "File+path
-set statusline+=%2*\ %y\                                  "FileType
-set statusline+=%3*\ %{''.(&fenc!=''?&fenc:&enc).''}      "Encoding
-set statusline+=%3*\ %{(&bomb?\",BOM\":\"\")}\            "Encoding2
-set statusline+=%4*\ %{&ff}\                              "FileFormat (dos/unix..) 
-set statusline+=%5*\ %{&spelllang}\%{HighlightSearch()}\  "Spellanguage & Highlight on?
-set statusline+=%8*\ %=\ row:%l/%L\ (%03p%%)\             "Rownumber/total (%)
-set statusline+=%9*\ col:%03c\                            "Colnr
-set statusline+=%0*\ \ %m%r%w\ %P\ \                      "Modified? Readonly? 
+"set statusline=
+"set statusline+=%7*\[%n]                                  "buffernr
+"set statusline+=%1*\ %<%F\                                "File+path
+"set statusline+=%2*\ %y\                                  "FileType
+"set statusline+=%3*\ %{''.(&fenc!=''?&fenc:&enc).''}      "Encoding
+"set statusline+=%3*\ %{(&bomb?\",BOM\":\"\")}\            "Encoding2
+"set statusline+=%4*\ %{&ff}\                              "FileFormat (dos/unix..) 
+"set statusline+=%5*\ %{&spelllang}\%{HighlightSearch()}\  "Spellanguage & Highlight on?
+"set statusline+=%8*\ %=\ row:%l/%L\ (%03p%%)\             "Rownumber/total (%)
+"set statusline+=%9*\ col:%03c\                            "Colnr
+"set statusline+=%0*\ \ %m%r%w\ %P\ \                      "Modified? Readonly? 
 function! HighlightSearch()
     if &hls
    return 'H'
@@ -87,3 +87,68 @@ function! HighlightSearch()
     endif
 endfunction
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+"set statusline=%<%F%h%m%r%h%w%y\ %{&ff}\ %{strftime(\"%c\",getftime(expand(\"%:p\")))}%=\ lin:%l\,%L\ col:%c%V\ pos:%o\ ascii:%b\ %P
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+"set statusline=%F%m%r%h%w\ (%{&ff}){%Y}[%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+"set statusline=%<%F%h%m%r%h%w%y\ %{&ff}\ %{strftime(\"%d/%m/%Y-%H:%M\")}%=\ col:%c%V\ ascii:%b\ pos:%o\ lin:%l\,%L\ %P
+"set statusline=%<%F%h%m%r%h%w%y\ %{&ff}\ %{strftime(\"%c\",getftime(expand(\"%:p\")))}%=\ lin:%l\,%L\ col:%c%V\ pos:%o\ ascii:%b\ %P
+"set statusline=[%n]\ %<%F\ \ \ [%M%R%H%W%Y][%{&ff}]\ \ %=\ line:%l/%L\ col:%c\ \ \ %p%%\ \ \ @%{strftime(\"%H:%M:%S\")}
+
+
+"These three functions are just for example.
+"It might be that these three functions are irrelevant
+"in example statuslines, but they demonstrate that
+"functions can be used in statusline too.
+fu! Percent()
+  let byte = line2byte( line( "." ) ) + col( "." ) - 1
+  let size = (line2byte( line( "$" ) + 1 ) - 1)
+  return (byte * 100) / size
+endf
+
+fu! FileEncoding()
+  if &fileencoding == ''
+    return "is not set"
+  else
+    return &fenc
+  endif
+endf
+
+fu! GlobalEncoding()
+  if &fileencoding == ''
+    return "is not set"
+  else
+    return &enc
+  endif
+endf
+
+"And now the magical stuff!
+"We define some statuslines at first.
+let g:StatusLines{0}='[%1*%n%*]%= [%2*%03bD%* | %2*%5(0x%02BH%)%*] [%8oC=%1*%3{Percent()}%%%*] [%8c] : [%8l/%8L = %1*%3p%%%*]'
+let g:StatusLines{1}='[%1*%n%*]%= [%1*GENC%* %10(%{GlobalEncoding()}%)] [%1*FENC%* %10(%{FileEncoding()}%)]'
+let g:StatusLines{2}='[%1*%n%*]%= [%1*%F%*]'
+let g:StatusLinesCurrent=-1
+
+"And we map switching on some unused key.
+map <F3> :call ToggleStatusLine()<CR>
+
+"Function that switch between several statuslines
+fu! ToggleStatusLine()
+  let g:StatusLinesCurrent=g:StatusLinesCurrent+1
+  if (!exists("g:StatusLines" . g:StatusLinesCurrent))
+    let g:StatusLinesCurrent=0
+  endif
+  let &statusline=g:StatusLines{g:StatusLinesCurrent}
+endf
+
+"We use the first one as default.
+call ToggleStatusLine()
+
+"Because I used some highlighting in the example statuslines
+"I put some highlighting definitions here too.
+"The colours of statusline itself.
+hi statusline term=inverse,bold cterm=inverse,bold ctermfg=white ctermbg=black
+hi statuslinenc term=inverse,bold cterm=inverse,bold ctermfg=white ctermbg=black
+
+"Some other colours used in statuslines.
+hi User1 term=inverse,bold cterm=inverse,bold ctermfg=white ctermbg=black
+hi User2 term=inverse,bold cterm=inverse,bold ctermfg=white ctermbg=black
