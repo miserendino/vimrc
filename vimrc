@@ -2,7 +2,7 @@ set nocompatible                " choose no compatibility with legacy vi
 set showmode
 set ruler
 set mouse=a
-colorscheme elflord
+colorscheme desert
 syntax enable
 "" For regular expressions turn magic on
 set magic
@@ -29,6 +29,7 @@ set incsearch                   " incremental searching
 set ignorecase                  " searches are case insensitive...
 set smartcase                   " ... unless they contain at least one capital letter
 "" Mapping
+map <F1> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 map! #2  :w              
 map #5  :mak<CR>
 map #8  :cn<CR>
