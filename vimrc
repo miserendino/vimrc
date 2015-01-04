@@ -29,6 +29,7 @@ set incsearch                   " incremental searching
 set ignorecase                  " searches are case insensitive...
 set smartcase                   " ... unless they contain at least one capital letter
 "" Mapping
+map <F4>  :q!<CR> 
 map <F1> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 map! #2  :w              
 map #5  :mak<CR>
