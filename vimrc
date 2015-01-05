@@ -1,8 +1,12 @@
 set nocompatible                " choose no compatibility with legacy vi
 set showmode
 set ruler
+"Do not show startmessage
+set shortmess=I
+" Better command-line completion
+set wildmenu
 set mouse=a
-colorscheme desert
+colorscheme pablo
 syntax enable
 "" For regular expressions turn magic on
 set magic
@@ -20,8 +24,12 @@ filetype plugin indent on       " load file type plugins + indentation
 "" Whitespace
 set nowrap                      " don't wrap lines
 set tabstop=2 shiftwidth=2      " a tab is two spaces (or set this to 4)
+" Instead of failing a command because of unsaved changes, instead raise a
+" dialogue asking if you wish to save changed files.
+set confirm
 set expandtab                   " use spaces, not tabs (optional)
-set backspace=indent,eol,start  " backspace through everything in insert mode
+" Allow backspacing over autoindent, line breaks and start of insert action
+set backspace=indent,eol,start
 set nu                          " number of line
 "" Searching
 set hlsearch                    " highlight matches
