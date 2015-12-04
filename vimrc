@@ -6,7 +6,8 @@ set shortmess=I
 " Better command-line completion
 set wildmenu
 set mouse=a
-colorscheme pablo
+colorscheme slate
+set bg=light
 syntax enable
 "" For regular expressions turn magic on
 set magic
@@ -47,8 +48,8 @@ map #7  :cp<CR>
 "" Mark the cursor
 set cursorline
 set cursorcolumn
-:hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-:hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+:hi CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=darkred guifg=white
+":hi CursorLine   cterm=NONE ctermbg=grey ctermfg=white guibg=darkred guifg=white
 "" Backup file
 set backup
 set writebackup
@@ -281,3 +282,5 @@ function! s:HourColor()
   redraw
   echo g:colors_name
 endfunction
+
+
