@@ -18,7 +18,6 @@ set smartindent
 set relativenumber              " show relativenumber
 set nofoldenable                 " disable folding
 set confirm                       " prompt when existing from an unsaved file
-set title                         " show file in titlebar
 set cindent
 set showcmd                     " display incomplete commands
 filetype plugin indent on       " load file type plugins + indentation
@@ -38,13 +37,24 @@ set incsearch                   " incremental searching
 set ignorecase                  " searches are case insensitive...
 set smartcase                   " ... unless they contain at least one capital letter
 "" Mapping
+"source $MYVIMRC reloads the saved $MYVIMRC
+nmap <Leader>s :source $MYVIMRC
+
+" " opens $MYVIMRC for editing, or use :tabedit $MYVIMRC
+nmap <Leader>v :e $MYVIMRC
+" " <Leader> is \ by default, so those commands can be invoked by doing \v and
+" \s
+
 map <F4>  :q!<CR> 
 map <F1> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 map! #2  :w              
-map #5  :mak<CR>
 map #8  :cn<CR>
 map #7  :cp<CR>
-:map #6 :!./a.out<CR>
+map <F5> :make  
+setlocal makeprg=g++\ -o\ %:p:r\ %:p\ -std=c++1y\ -Wall\ -fmessage-length=0\ -g\ -pg\ -v
+noremap <F9> :make<cr><cr>:botright cwindow<cr>         " The second line is sets F9 to run :make and then open the quickfix window to the bottom of the screen if there are build errors
+noremap <buffer> <F10> :!%:p:r<cr>               " The last line runs the corresponding executable file.
+map #6 :!./a.out<CR>
 "" Mark the cursor
 set cursorline
 set cursorcolumn
